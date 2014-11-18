@@ -1,4 +1,4 @@
 c-arduino-prog
 ==============
 
-C Programming for Arduino
+Exercises of the book [C Programming for Arduino](http://cprogrammingforarduino.com/).
