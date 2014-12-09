@@ -4,24 +4,36 @@
  */
 
 const int switchPin = 2;
-const int ledPin = 13;
 int switchState = 0; // Storage variable for current switch
+int inByte = 0;
 
 void setup()
 {
-    pinMode(ledPin, OUTPUT);
+    Serial.begin(9600);
     pinMode(switchPin, INPUT);
+    sayHello();
 }
 
 void loop()
 {
-    switchState = digitalRead(switchPin);
-    if (switchState == HIGH)
+    if (Serial.available() > 0)
     {
-        digitalWrite(ledPin, HIGH);
+        // If a valid byte is received from processing,
+        // read the digital in
+        inByte = Serial.read();
+        switchState = digitalRead(switchPin);
+
+        // Send switch state to Arduino
+        Serial.write("0");
+        Serial.write(switchState);
     }
-    else
+}
+
+void sayHello()
+{
+    while (Serial.available() <= 0)
     {
-        digitalWrite(ledPin, LOW);
+        Serial.print('Z'); // Send a capital Z to Arduino to say "HELLO!"
+        delay(200);
     }
 }
