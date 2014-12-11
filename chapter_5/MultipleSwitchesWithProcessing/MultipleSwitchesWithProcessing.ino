@@ -14,7 +14,11 @@
 #define switchesNumber 3             // define the number of buttons as a constant
 
 int switchesStates[switchesNumber] ; // array storing current switches states
+int lastSwitchesStates[switchesNumber] ; // array storing last switches states
 int inByte = 0;
+// variables related to the debouncing system
+long lastDebounceTime = 0;
+long debounceDelay = 50;
 
 void setup() {
   Serial.begin(9600);
@@ -26,6 +30,7 @@ void setup() {
     pinMode(i+2, INPUT); // the switch pin i+2 is setup as an input
     
     switchesStates[i] = 0 ;
+    lastSwitchesStates[i] = LOW;
   }
 
   sayHello();                      // waiting for the processing program hello answer
@@ -41,8 +46,17 @@ void loop(){
 
     for(int i = 0 ; i < switchesNumber ; i++)
     {
-      switchesStates[i] = digitalRead(i+2); // BE CAREFUL TO THAT INDEX 
-                                            // WE ARE STARTING FROM PIN 2 !
+      int readInput = digitalRead(i+2);
+      if (readInput != lastSwitchesStates[i])
+      {
+          // Reset the debounce counter by storing the current uptime in ms
+          lastDebounceTime = millis();
+      }
+      if ( (millis() - lastDebounceTime) > debounceDelay)
+      {
+          // Store the value because it is a debounced one
+          switchesStates[i] = readInput;
+      }
       
       Serial.write(i);                 // send the 1st byte with the switch number from 0 to 2 here.
       Serial.write(switchesStates[i]); // send the bytes with the switch i state
