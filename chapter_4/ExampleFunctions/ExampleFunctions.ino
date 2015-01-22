@@ -4,23 +4,29 @@
 
 #include <math.h>
 
-int mySum(int m, int n) {
+int mySum(int m, int n)
+{
     return m + n;
 }
 
-double myExp(double x) {
+double myExp(double x)
+{
     return exp(x / 2);
 }
 
-void setup() {
+void setup()
+{
     Serial.begin(9600);
 }
 
-void loop() {
+void loop()
+{
     int m = 0;
     int n = 0;
-    for (m; m < 10; m++) {
-        for (n; n < 10; n++) {
+    for (m; m < 10; m++)
+    {
+        for (n; n < 10; n++)
+        {
             Serial.print("mySum: ");
             Serial.println(mySum(m, n));
         }
